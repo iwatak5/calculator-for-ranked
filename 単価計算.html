@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ブロスタ 対価計算ツール</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      margin: 40px auto;
+      max-width: 400px;
+      padding: 0 15px;
+      color: #333;
+    }
+    h2 { margin-bottom: 10px; }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin: 6px 0;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .info { margin-top: 10px; font-size: 16px; }
+    .highlight { font-weight: bold; }
+    #result { margin-top: 20px; font-size: 18px; font-weight: bold; color: #000; }
+
+    /* ランクごとの色 */
+    .bronze { color: #a97142; }
+    .silver { color: #7f8c8d; }
+    .gold { color: #f1c40f; }
+    .diamond { color: #00bcd4; }
+    .elite { color: #9b59b6; }   /* 紫 */
+    .legend { color: #e74c3c; }  /* 赤 */
+    .master { color: #f4d03f; }  /* 黄 */
+  </style>
+</head>
+<body>
+  <h2>ブロスタ代行 単価計算ツール</h2>
+
+  <label>開始レート：</label>
+  <input type="number" id="start" placeholder="例: 2500" oninput="calculate()">
+  <div id="startRank" class="info"></div>
+
+  <label>終了レート：</label>
+  <input type="number" id="end" placeholder="例: 9500" oninput="calculate()">
+  <div id="endRank" class="info"></div>
+
+  <div id="result"></div>
+
+  <script>
+    const ranges = [
+      // 🥉 ブロンズ
+      {from:0,to:250,name:"🥉 ブロンズ1",rate:1,class:"bronze"},
+      {from:250,to:500,name:"🥉 ブロンズ2",rate:1,class:"bronze"},
+      {from:500,to:750,name:"🥉 ブロンズ3",rate:1,class:"bronze"},
+
+      // 🥈 シルバー
+      {from:750,to:1000,name:"🥈 シルバー1",rate:1.5,class:"silver"},
+      {from:1000,to:1250,name:"🥈 シルバー2",rate:1.5,class:"silver"},
+      {from:1250,to:1500,name:"🥈 シルバー3",rate:1.5,class:"silver"},
+
+      // 🥇 ゴールド
+      {from:1500,to:2000,name:"🥇 ゴールド1",rate:2,class:"gold"},
+      {from:2000,to:2500,name:"🥇 ゴールド2",rate:2,class:"gold"},
+      {from:2500,to:3000,name:"🥇 ゴールド3",rate:2,class:"gold"},
+
+      // 💎 ダイヤ
+      {from:3000,to:3500,name:"💎 ダイヤ1",rate:3,class:"diamond"},
+      {from:3500,to:4000,name:"💎 ダイヤ2",rate:3,class:"diamond"},
+      {from:4000,to:4500,name:"💎 ダイヤ3",rate:3,class:"diamond"},
+
+      // 💜 エリート
+      {from:4500,to:5000,name:"💜 エリート1",rate:5,class:"elite"},
+      {from:5000,to:5500,name:"💜 エリート2",rate:5,class:"elite"},
+      {from:5500,to:6000,name:"💜 エリート3",rate:5,class:"elite"},
+
+      // ❤️ レジェンド
+      {from:6000,to:6750,name:"❤️ レジェンド1",rate:7,class:"legend"},
+      {from:6750,to:7500,name:"❤️ レジェンド2",rate:7,class:"legend"},
+      {from:7500,to:8250,name:"❤️ レジェンド3",rate:7,class:"legend"},
+
+      // 💛 マスター
+      {from:8250,to:9250,name:"💛 マスター1",rate:12,class:"master"},
+      {from:9250,to:10250,name:"💛 マスター2",rate:12,class:"master"},
+      {from:10250,to:11250,name:"💛 マスター3",rate:12,class:"master"},
+    ];
+
+    function getRank(value) {
+      for (const r of ranges) {
+        if (value >= r.from && value < r.to) return r;
+      }
+      return null;
+    }
+
+    function calculate() {
+      const start = parseFloat(document.getElementById("start").value);
+      const end = parseFloat(document.getElementById("end").value);
+      const startRankEl = document.getElementById("startRank");
+      const endRankEl = document.getElementById("endRank");
+      const resultEl = document.getElementById("result");
+
+      startRankEl.textContent = "";
+      endRankEl.textContent = "";
+      resultEl.textContent = "";
+
+      if (!isNaN(start)) {
+        const rank = getRank(start);
+        if (rank)
+          startRankEl.innerHTML = `開始ランク：<span class="highlight ${rank.class}">${rank.name}</span>`;
+        else
+          startRankEl.textContent = "開始ランク：範囲外";
+      }
+
+      if (!isNaN(end)) {
+        const rank = getRank(end);
+        if (rank)
+          endRankEl.innerHTML = `終了ランク：<span class="highlight ${rank.class}">${rank.name}</span>`;
+        else
+          endRankEl.textContent = "終了ランク：範囲外";
+      }
+
+      if (isNaN(start) || isNaN(end) || end <= start) return;
+
+      let total = 0;
+      for (const r of ranges) {
+        const rangeStart = Math.max(start, r.from);
+        const rangeEnd = Math.min(end, r.to);
+        if (rangeEnd > rangeStart) total += (rangeEnd - rangeStart) * r.rate;
+      }
+
+      resultEl.textContent = `単価：${total.toLocaleString()} 円`;
+    }
+  </script>
+</body>
+</html>
