@@ -62,29 +62,29 @@
       {from:1250,to:1500,name:"🥈 シルバー3",rate:1.5,class:"silver"},
 
       // 🥇 ゴールド
-      {from:1500,to:2000,name:"🥇 ゴールド1",rate:2,class:"gold"},
-      {from:2000,to:2500,name:"🥇 ゴールド2",rate:2,class:"gold"},
-      {from:2500,to:3000,name:"🥇 ゴールド3",rate:2,class:"gold"},
+      {from:1500,to:2000,name:"🥇 ゴールド1",rate:1.5,class:"gold"},
+      {from:2000,to:2500,name:"🥇 ゴールド2",rate:1.5,class:"gold"},
+      {from:2500,to:3000,name:"🥇 ゴールド3",rate:1.5,class:"gold"},
 
       // 💎 ダイヤ
-      {from:3000,to:3500,name:"💎 ダイヤ1",rate:3,class:"diamond"},
-      {from:3500,to:4000,name:"💎 ダイヤ2",rate:3,class:"diamond"},
-      {from:4000,to:4500,name:"💎 ダイヤ3",rate:3,class:"diamond"},
+      {from:3000,to:3500,name:"💎 ダイヤ1",rate:1.5,class:"diamond"},
+      {from:3500,to:4000,name:"💎 ダイヤ2",rate:1.5,class:"diamond"},
+      {from:4000,to:4500,name:"💎 ダイヤ3",rate:1.5,class:"diamond"},
 
       // 💜 エリート
-      {from:4500,to:5000,name:"💜 エリート1",rate:5,class:"elite"},
-      {from:5000,to:5500,name:"💜 エリート2",rate:5,class:"elite"},
-      {from:5500,to:6000,name:"💜 エリート3",rate:5,class:"elite"},
+      {from:4500,to:5000,name:"💜 エリート1",rate:1.5,class:"elite"},
+      {from:5000,to:5500,name:"💜 エリート2",rate:1.5,class:"elite"},
+      {from:5500,to:6000,name:"💜 エリート3",rate:1.5,class:"elite"},
 
       // ❤️ レジェンド
-      {from:6000,to:6750,name:"❤️ レジェンド1",rate:7,class:"legend"},
-      {from:6750,to:7500,name:"❤️ レジェンド2",rate:7,class:"legend"},
-      {from:7500,to:8250,name:"❤️ レジェンド3",rate:7,class:"legend"},
+      {from:6000,to:6750,name:"❤️ レジェンド1",rate:2,class:"legend"},
+      {from:6750,to:7500,name:"❤️ レジェンド2",rate:2,class:"legend"},
+      {from:7500,to:8250,name:"❤️ レジェンド3",rate:3,class:"legend"},
 
       // 💛 マスター
-      {from:8250,to:9250,name:"💛 マスター1",rate:12,class:"master"},
+      {from:8250,to:9250,name:"💛 マスター1",rate:7,class:"master"},
       {from:9250,to:10250,name:"💛 マスター2",rate:12,class:"master"},
-      {from:10250,to:11250,name:"💛 マスター3",rate:12,class:"master"},
+      {from:10250,to:11250,name:"💛 マスター3",rate:30,class:"master"},
     ];
 
     function getRank(value) {
@@ -128,6 +128,7 @@
         const rangeStart = Math.max(start, r.from);
         const rangeEnd = Math.min(end, r.to);
         if (rangeEnd > rangeStart) total += (rangeEnd - rangeStart) * r.rate;
+total = Math.ceil(total / 10) * 10;
       }
 
       resultEl.textContent = `単価：${total.toLocaleString()} 円`;
